@@ -1,0 +1,5 @@
+secret: foobar
+locations:
+  token: location
+  foobar: /tmp/
+  file: /tmp/some_file.txt
