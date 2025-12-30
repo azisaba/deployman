@@ -60,6 +60,12 @@ app.put('/deploy', async (c) => {
     return c.text('Invalid filename', 400)
   }
 
+  const forwardedFor = c.req.header('x-forwarded-for')
+  const realIp = c.req.header('x-real-ip') ?? c.req.header("cf-connecting-ip")
+  const remoteAddress = (c.req.raw as { socket?: { remoteAddress?: string } }).socket?.remoteAddress
+  const remoteHost = forwardedFor || realIp || remoteAddress || 'unknown'
+  console.log(`Accepted ${filename} from ${remoteHost}`)
+
   const location = config.locations[token]
   try {
     const targetPath = await resolveTargetPath(location, filename)
